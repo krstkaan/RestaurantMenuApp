@@ -8,7 +8,7 @@ const ProductsPage = () => {
   const route = useRoute();
   const { categoryId } = route.params;
 
-  const screenWidth = Dimensions.get('window').width;
+  const screenWidth = Dimensions.get('window').width;  // Ekran genişliği alınır
 
   useEffect(() => {
     fetch(`http://192.168.1.101:8000/get_products.php?catid=${categoryId}`)
@@ -37,10 +37,10 @@ const ProductsPage = () => {
         data={products}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={[styles.productCard, { width: screenWidth * 0.9 }]}>
+          <View style={styles.productCard}>
             <Image
               source={{ uri: item.image }}
-              style={styles.productImage}
+              style={[styles.productImage, { width: screenWidth * 0.9 }]}  // Görsel genişliği sayfa genişliğine ayarlanır
             />
             <Text style={styles.productName}>{item.name}</Text>
             <Text style={styles.price}>{item.price} TL</Text>
@@ -66,8 +66,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   productImage: {
-    width: 150,
-    height: 150,
+    height: 200,  // Görsel yüksekliği sabitlenir
     marginBottom: 10,
     borderRadius: 10,
   },
