@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Card, Title, Paragraph } from 'react-native-paper';  // Material Design bileşenleri
 
 const HomePage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
-  const screenWidth = Dimensions.get('window').width;  // Ekran genişliğini al
+  const screenWidth = Dimensions.get('window').width;  // Ekran genişliği
 
   useEffect(() => {
     fetch('http://192.168.1.101:8000/get_categories.php')
@@ -24,8 +25,9 @@ const HomePage = () => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text>Yükleniyor...</Text>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#6200ea" />
+        <Text style={styles.loadingText}>Yükleniyor...</Text>
       </View>
     );
   }
@@ -34,14 +36,16 @@ const HomePage = () => {
     <View style={styles.container}>
       <FlatList
         data={categories}
+        numColumns={2} // İki kolonlu bir grid yapısı
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={[styles.categoryCard, { width: screenWidth * 0.9 }]}  // Ekranın %90'ını kapla
-            onPress={() => navigation.navigate('SubCategoryPage', { parentId: item.id })}
-          >
-            <Image source={{ uri: item.image }} style={[styles.categoryImage, { width: screenWidth * 0.8, height: screenWidth * 0.4 }]} />
-            <Text style={styles.categoryName}>{item.name}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SubCategoryPage', { parentId: item.id })}>
+            <Card style={styles.cardContainer}>
+              <Card.Cover source={{ uri: item.image }} style={styles.cardImage} />
+              <Card.Content>
+                <Title style={styles.title}>{item.name}</Title>
+              </Card.Content>
+            </Card>
           </TouchableOpacity>
         )}
       />
@@ -52,23 +56,36 @@ const HomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
+    backgroundColor: '#f5f5f5',
+  },
+  loadingContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  categoryCard: {
-    padding: 15,
-    marginVertical: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    alignItems: 'center',
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#6200ea',
   },
-  categoryImage: {
-    marginBottom: 10,
-    borderRadius: 10,
+  cardContainer: {
+    width: Dimensions.get('window').width / 2.3,
+    margin: 8,
+    borderRadius: 15,
+    elevation: 4,
+    backgroundColor: '#fff',
   },
-  categoryName: {
-    fontSize: 18,
+  cardImage: {
+    height: 150,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  title: {
+    fontSize: 16,
     fontWeight: 'bold',
+    color: '#333',
+    marginTop: 8,
     textAlign: 'center',
   },
 });

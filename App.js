@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomePage from './.expo/screens/HomePage';
-import SubCategoryPage from './.expo/screens/SubCategoryPage';
-import ProductPage from './.expo/screens/ProductPage';
+import HomePage from './screens/HomePage';
+import SubCategoryPage from './screens/SubCategoryPage';
+import ProductPage from './screens/ProductPage';
 
 const Stack = createStackNavigator();
 
