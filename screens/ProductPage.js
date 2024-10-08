@@ -11,7 +11,7 @@ const ProductsPage = () => {
   const screenWidth = Dimensions.get('window').width;  // Ekran genişliği alınır
 
   useEffect(() => {
-    fetch(`http://192.168.1.101:8000/get_products.php?catid=${categoryId}`)
+    fetch(`http://192.168.1.105:8000/get_products.php?catid=${categoryId}`)
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);

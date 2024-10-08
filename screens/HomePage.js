@@ -2,17 +2,60 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, ActivityIndicator, TouchableOpacity, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Card, Title } from 'react-native-paper';  // Material Design bileşenleri
+import { useFocusEffect } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { login } from '../redux/UserSlice';
 
-const HomePage = () => {
+
+
+
+
+const HomePage = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
 
   const screenWidth = Dimensions.get('window').width;  // Ekran genişliği
   const screenHeight = Dimensions.get('window').height;  // Ekran yüksekliği
 
+  const checkAutologin = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      try {
+        let formData = new FormData();
+        formData.append('token', token);
+        const response = await axios.post('http://192.168.1.105:8000/autologin.php', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('kaan');
+        console.log(response.data);
+        if (response.data.isAuth) {
+          dispatch(login(token));
+        } else if (response.data.isAuth === false) {
+          // tüm tanımlı  AsyncStorage sil
+          await AsyncStorage.clear();
+
+          dispatch(logout());
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkAutologin().catch((error) => console.error('Autologin process error:', error));
+    }, [dispatch, navigation])
+  );
+
   useEffect(() => {
-    fetch('http://192.168.1.101:8000/get_categories.php')
+    fetch('http://192.168.1.105:8000/get_categories.php')
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
@@ -58,16 +101,23 @@ const HomePage = () => {
           ListHeaderComponent={renderHeader} // Karşılama metnini liste başlığı olarak ekler
           numColumns={2} // İki kolonlu bir grid yapısı
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <TouchableOpacity onPress={() => navigation.navigate('SubCategoryPage', { parentId: item.id })}>
-              <Card style={styles.cardContainer}>
-                <Card.Cover source={{ uri: item.image }} style={styles.cardImage} />
-                <Card.Content>
-                  <Title style={styles.title}>{item.name}</Title>
-                </Card.Content>
-              </Card>
+              <View style={[styles.wrapper, index % 2 === 0 ? styles.leftColumnCard : styles.rightColumnCard]}>
+                <View style={styles.head}>
+                  <ImageBackground source={{ uri: item.image }} style={styles.headImage} />
+                </View>
+                <View style={styles.blueOverlay} />
+                <View style={styles.content}>
+                  <Text style={styles.contentTitle}></Text>
+                </View>
+                <View style={styles.bottom}>
+                  <Text style={styles.bottomText}>{item.name}</Text>
+                </View>
+              </View>
             </TouchableOpacity>
           )}
+        
         />
       </View>
     </ImageBackground>
@@ -77,6 +127,7 @@ const HomePage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom:75,
   },
   loadingContainer: {
     flex: 1,
@@ -106,39 +157,82 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#fff', // Yazı rengi beyaz olarak değiştirildi
+    color: '#fff',
     textAlign: 'center',
   },
   welcomeSubText: {
     fontSize: 16,
-    color: '#ddd', // Yazı rengi gri tonlarına değiştirildi
+    color: '#ddd',
     textAlign: 'center',
     marginTop: 10,
   },
-  cardContainer: {
+  wrapper: {
     width: Dimensions.get('window').width / 2.3,
-    margin: 8,
-    borderRadius: 15,
-    elevation: 4,
     backgroundColor: '#fff',
+    textAlign: 'left',
+    position: 'relative',
+    borderRadius: 30,
+    overflow: 'hidden',
+    boxShadow: '0px 1px 6px rgba(31, 31, 31, 0.12), 0px 1px 4px rgba(31, 31, 31, 0.12)',
+    margin: 12,
   },
-  cardImage: {
-    height: 150,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+  head: {
+    width: '100%',
+    height: 200,
+    backgroundColor: 'rgb(130, 168, 225)',
   },
-  title: {
-    fontSize: 16,
+  headImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  blueOverlay: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 175,
+    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+    transform: [{ skewY: '-10deg' }],
+  },
+  content: {
+    position: 'absolute',
+    top: 260,
+    left: 25,
+    color: '#fff',
+  },
+  contentTitle: {
+    fontSize: 20,
+    fontWeight: 'normal',
+    lineHeight: 24,
+  },
+  contentSubtitle: {
+    fontSize: 14,
+    fontWeight: 'normal',
+    lineHeight: 18,
+  },
+  bottom: {
+    width: '100%',
+    bottom: 4,
+    padding: 10,
+    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+  },
+  bottomText: {
+    color: '#fff',
+    fontSize: 14,
     fontWeight: 'bold',
-    color: '#333',
-    marginTop: 8,
     textAlign: 'center',
+  },
+  leftColumnCard: {
+    marginTop: 0,
+  },
+  rightColumnCard: {
+    marginTop: 30,
   },
   backgroundImage: {
     flex: 1,
     width: '100%',
     height: '100%',
-    resizeMode: 'cover', // Arka plan resminin tamamını kapla
+    resizeMode: 'cover',
   },
 });
 

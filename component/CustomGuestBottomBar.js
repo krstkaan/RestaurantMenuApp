@@ -1,12 +1,12 @@
 import { StyleSheet, View, Keyboard } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { faHome, faUser, faHandHoldingDroplet, faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faHandHoldingDroplet, faCartShopping, faDoorOpen } from '@fortawesome/free-solid-svg-icons';
 import { useNavigationState } from '@react-navigation/native'; // useNavigationState hook'u eklendi
 import BarItem from './BarItem';
 
 
 
-const CustomUserBottomBar = () => {
+const CustomGuestBottomBar = () => {
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
     const navigationState = useNavigationState((state) => state); // navigationState ile mevcut state alınıyor
@@ -53,20 +53,26 @@ const CustomUserBottomBar = () => {
                 isActive={currentRouteName === 'MyCartPage'} // Aktif rota kontrolü
             />
             <BarItem
-                itemText="Account"
-                itemLink="MyAccountPage"
+                itemText="Signup"
+                itemLink="SignupPage"
                 itemIcon={faUser}
                 iconSize={25}
                 iconColor="black"
-                isActive={currentRouteName === 'MyAccountPage'}
+                isActive={currentRouteName === 'SignupPage'}
             />
-
-
+                        <BarItem
+                itemText="Login"
+                itemLink="LoginPage"
+                itemIcon={faDoorOpen}
+                iconSize={25}
+                iconColor="black"
+                isActive={currentRouteName === 'LoginPage'}
+            />
         </View>
     );
 };
 
-export default CustomUserBottomBar;
+export default CustomGuestBottomBar;
 
 const styles = StyleSheet.create({
     container: {
