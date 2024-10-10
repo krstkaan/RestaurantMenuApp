@@ -90,10 +90,7 @@ const HomePage = ({ navigation }) => {
   );
 
   return (
-    <ImageBackground 
-      source={require('../assets/images/background.jpg')}  // Arka plan resmi assets klasöründen çekiliyor
-      style={styles.backgroundImage}
-    >
+
       <View style={styles.container}>
         
         <FlatList
@@ -120,7 +117,6 @@ const HomePage = ({ navigation }) => {
         
         />
       </View>
-    </ImageBackground>
   );
 };
 
@@ -128,6 +124,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom:75,
+    backgroundColor: '#ededed', // Arka plan rengi #ededed olarak ayarlandı
+
   },
   loadingContainer: {
     flex: 1,
@@ -162,7 +160,7 @@ const styles = StyleSheet.create({
   },
   welcomeSubText: {
     fontSize: 16,
-    color: '#ddd',
+    color: '#fff',
     textAlign: 'center',
     marginTop: 10,
   },
@@ -191,7 +189,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     top: 175,
-    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+    backgroundColor: 'rgba(202, 28, 28, 0.8)',
     transform: [{ skewY: '-10deg' }],
   },
   content: {
@@ -214,7 +212,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 4,
     padding: 10,
-    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+    backgroundColor: 'rgba(202, 28, 28, 0.8)',
   },
   bottomText: {
     color: '#fff',

@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom:75,
+    marginTop:15,
   },
   loadingContainer: {
     flex: 1,
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     top: 175,
-    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+    backgroundColor: 'rgba(202, 28, 28, 0.8)',
     transform: [{ skewY: '-10deg' }],
   },
   content: {
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     width: '100%',
     bottom: 4,
     padding: 10,
-    backgroundColor: 'rgba(4, 96, 130, 0.8)',
+    backgroundColor: 'rgba(202, 28, 28, 0.8)',
   },
   bottomText: {
     color: '#fff',

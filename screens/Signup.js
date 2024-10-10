@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ImageBackground } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '../redux/UserSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const Signup = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -25,7 +25,7 @@ const Signup = ({ navigation }) => {
             
             const response = await axios.post('http://192.168.1.105:8000/signup.php', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data', // Form-data gönderdiğimiz için doğru Content-Type ayarı
+                    'Content-Type': 'multipart/form-data',
                 },
             });
             console.log(response.data);
@@ -51,12 +51,17 @@ const Signup = ({ navigation }) => {
     };
 
     return (
+        <ImageBackground 
+        source={require('../assets/images/backgroundlogin.jpg')}  // Arka plan resmi assets klasöründen çekiliyor
+        style={styles.backgroundImage}
+      >
         <View style={styles.container}>
             <Text style={styles.label}>Kullanıcı Adı</Text>
             <TextInput
                 value={username}
                 onChangeText={setUsername}
                 placeholder="Kullanıcı Adı"
+                placeholderTextColor="#888"
                 style={styles.input}
             />
             <Text style={styles.label}>Email</Text>
@@ -65,6 +70,7 @@ const Signup = ({ navigation }) => {
                 onChangeText={setEmail}
                 placeholder="Email"
                 keyboardType="email-address"
+                placeholderTextColor="#888"
                 style={styles.input}
             />
             <Text style={styles.label}>Şifre</Text>
@@ -73,46 +79,81 @@ const Signup = ({ navigation }) => {
                 onChangeText={setPassword}
                 placeholder="Şifre"
                 secureTextEntry
+                placeholderTextColor="#888"
                 style={styles.input}
             />
             <TouchableOpacity style={styles.button} onPress={handleSignup}>
                 <Text style={styles.buttonText}>Kayıt Ol</Text>
             </TouchableOpacity>
+
+            {/* Zaten üye misin? Giriş yap butonu */}
+            <TouchableOpacity 
+                style={styles.loginButton} 
+                onPress={() => navigation.navigate('LoginPage')} // LoginPage.js'e yönlendirme
+            >
+                <Text style={styles.loginText}>Zaten üye misin? Giriş yap!</Text>
+            </TouchableOpacity>
         </View>
+        </ImageBackground>
     );
 };
 
 const styles = StyleSheet.create({
+    backgroundImage: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
     container: {
         flex: 1,
-        padding: 20,
+        padding: 30,
         justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
     },
     label: {
-        fontSize: 16,
-        marginBottom: 5,
+        fontSize: 18,
+        marginBottom: 10,
         color: '#333',
+        fontWeight: '600',
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 15,
+        borderColor: '#ccc',
+        borderRadius: 12,
+        padding: 12,
+        marginBottom: 20,
         backgroundColor: '#fff',
         fontSize: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 2,
     },
     button: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#ca1c1c',
         paddingVertical: 15,
-        borderRadius: 8,
+        borderRadius: 12,
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 4,
     },
     buttonText: {
         color: '#fff',
-        fontSize: 18,
-        fontWeight: '600',
+        fontSize: 20,
+        fontWeight: '700',
+    },
+    loginButton: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    loginText: {
+        color: '#ca1c1c',
+        fontSize: 16,
+        fontWeight: '500',
     },
 });
 

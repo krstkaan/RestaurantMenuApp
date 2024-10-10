@@ -52,14 +52,6 @@ const CustomGuestBottomBar = () => {
                 iconColor="black"
                 isActive={currentRouteName === 'MyCartPage'} // Aktif rota kontrolü
             />
-            <BarItem
-                itemText="Signup"
-                itemLink="SignupPage"
-                itemIcon={faUser}
-                iconSize={25}
-                iconColor="black"
-                isActive={currentRouteName === 'SignupPage'}
-            />
                         <BarItem
                 itemText="Login"
                 itemLink="LoginPage"

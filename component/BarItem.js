@@ -16,7 +16,7 @@ const BarItem = ({ itemText, itemLink, itemIcon, iconSize, iconColor, iconStyle,
             <FontAwesomeIcon
                 icon={itemIcon}
                 size={iconSize}
-                color={isActive ? '#FF7F00' : iconColor} // Aktifse mavi, değilse varsayılan renk
+                color={isActive ? '#ca1c1c' : iconColor} // Aktifse mavi, değilse varsayılan renk
                 style={iconStyle}
             />
             <Text style={[styles.tabLabel, isActive && styles.activeTabLabel]}>{itemText}</Text>
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
         height:25
     },
     activeTabLabel: {
-        color: '#FF7F00', // Aktif sekmenin metin rengini mavi yap
+        color: '#ca1c1c', // Aktif sekmenin metin rengini mavi yap
     },
 });
