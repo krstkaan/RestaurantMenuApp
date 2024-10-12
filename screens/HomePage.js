@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { login } from '../redux/UserSlice';
+import { login, adminlogin } from '../redux/UserSlice';
 
 
 
@@ -34,9 +34,14 @@ const HomePage = ({ navigation }) => {
         });
         console.log('kaan');
         console.log(response.data);
-        if (response.data.isAuth) {
+        if (response.data.yetki == "helios") {
           dispatch(login(token));
-        } else if (response.data.isAuth === false) {
+          dispatch(adminlogin(token));
+        }
+        else if (response.data.yetki === "user") {
+          dispatch(login(token));
+        }
+        else if (response.data.isAuth === false) {
           // tüm tanımlı  AsyncStorage sil
           await AsyncStorage.clear();
 
@@ -78,7 +83,7 @@ const HomePage = ({ navigation }) => {
 
   const renderHeader = () => (
     <View style={[styles.welcomeContainer, { height: screenHeight * 0.35 }]}>
-      <ImageBackground 
+      <ImageBackground
         source={require('../assets/images/welcome-background.jpg')}  // welcomeBox için arka plan resmi
         style={[styles.welcomeBox, { width: screenWidth }]}  // Tam genişlik verildi
         imageStyle={{ borderBottomLeftRadius: 50, borderBottomRightRadius: 50 }}  // Arka plan resminin köşe yuvarlamaları
@@ -91,39 +96,39 @@ const HomePage = ({ navigation }) => {
 
   return (
 
-      <View style={styles.container}>
-        
-        <FlatList
-          data={categories}
-          ListHeaderComponent={renderHeader} // Karşılama metnini liste başlığı olarak ekler
-          numColumns={2} // İki kolonlu bir grid yapısı
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('SubCategoryPage', { parentId: item.id })}>
-              <View style={[styles.wrapper, index % 2 === 0 ? styles.leftColumnCard : styles.rightColumnCard]}>
-                <View style={styles.head}>
-                  <ImageBackground source={{ uri: item.image }} style={styles.headImage} />
-                </View>
-                <View style={styles.blueOverlay} />
-                <View style={styles.content}>
-                  <Text style={styles.contentTitle}></Text>
-                </View>
-                <View style={styles.bottom}>
-                  <Text style={styles.bottomText}>{item.name}</Text>
-                </View>
+    <View style={styles.container}>
+
+      <FlatList
+        data={categories}
+        ListHeaderComponent={renderHeader} // Karşılama metnini liste başlığı olarak ekler
+        numColumns={2} // İki kolonlu bir grid yapısı
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => navigation.navigate('SubCategoryPage', { parentId: item.id })}>
+            <View style={[styles.wrapper, index % 2 === 0 ? styles.leftColumnCard : styles.rightColumnCard]}>
+              <View style={styles.head}>
+                <ImageBackground source={{ uri: item.image }} style={styles.headImage} />
               </View>
-            </TouchableOpacity>
-          )}
-        
-        />
-      </View>
+              <View style={styles.blueOverlay} />
+              <View style={styles.content}>
+                <Text style={styles.contentTitle}></Text>
+              </View>
+              <View style={styles.bottom}>
+                <Text style={styles.bottomText}>{item.name}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom:75,
+    marginBottom: 75,
     backgroundColor: '#ededed', // Arka plan rengi #ededed olarak ayarlandı
 
   },

@@ -6,33 +6,24 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
-
-const MyAccount = ({ navigation }) => {
-  const dispatch = useDispatch();
-
-  const handleLogout = async () => {
-    await AsyncStorage.clear();
-    navigation.navigate('HomePage');
-    dispatch(logout());
-  };
-
+const AdminAccount = () => {
   return (
     <View>
 
       <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-        <Pressable style={styles.accountmenu} android_ripple={{ color: 'rgba(0,0,0,0.2)' }} onPress={() => navigation.navigate('Siparişlerim')}>
+        <Pressable style={styles.accountmenu} android_ripple={{ color: 'rgba(0,0,0,0.2)' }} onPress={() => navigation.navigate('Kategoriler')}>
+          <Ionicons name="file-tray-stacked-outline" size={24} color="#ca1c1c" />
+          <Text style={styles.accountmenutext}>Kategoriler</Text>
+          <Ionicons name="chevron-forward" size={24} color="#ca1c1c" style={{ marginLeft: 'auto' }} />
+        </Pressable>
+        <Pressable style={styles.accountmenu} android_ripple={{ color: 'rgba(0,0,0,0.2)' }} onPress={() => navigation.navigate('Ürünler')}>
+          <Ionicons name="pizza-outline" size={24} color="#ca1c1c" />
+          <Text style={styles.accountmenutext}>Ürünler</Text>
+          <Ionicons name="chevron-forward" size={24} color="#ca1c1c" style={{ marginLeft: 'auto' }} />
+        </Pressable>
+        <Pressable style={styles.accountmenu} android_ripple={{ color: 'rgba(0,0,0,0.2)' }} onPress={() => navigation.navigate('Siparişler')}>
           <Ionicons name="cart-outline" size={24} color="#ca1c1c" />
-          <Text style={styles.accountmenutext}>Siparişlerim</Text>
-          <Ionicons name="chevron-forward" size={24} color="#ca1c1c" style={{ marginLeft: 'auto' }} />
-        </Pressable>
-        <Pressable style={styles.accountmenu} android_ripple={{ color: 'rgba(0,0,0,0.2)' }} onPress={() => navigation.navigate('Konumlarım')}>
-          <Ionicons name="home-outline" size={24} color="#ca1c1c" />
-          <Text style={styles.accountmenutext}>Konumlarım</Text>
-          <Ionicons name="chevron-forward" size={24} color="#ca1c1c" style={{ marginLeft: 'auto' }} />
-        </Pressable>
-        <Pressable style={styles.accountmenu} onPress={handleLogout} android_ripple={{ color: 'rgba(0,0,0,0.2)' }}>
-          <Ionicons name="log-out-outline" size={24} color="#ca1c1c" />
-          <Text style={styles.accountmenutext}>Çıkış yap</Text>
+          <Text style={styles.accountmenutext}>Gelen Siparişler</Text>
           <Ionicons name="chevron-forward" size={24} color="#ca1c1c" style={{ marginLeft: 'auto' }} />
         </Pressable>
       </View>
@@ -40,7 +31,7 @@ const MyAccount = ({ navigation }) => {
   )
 }
 
-export default MyAccount
+export default AdminAccount
 
 const styles = StyleSheet.create({
   container: {
